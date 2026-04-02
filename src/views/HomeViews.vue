@@ -12,23 +12,27 @@
       </select>
     </div>
 
-    <div v-if="lugaresFiltrados.length === 0" class="no-result">
+    <div v-if="cargando" class="cargando">Cargando datos del clima...</div>
+
+    <div v-else-if="lugaresFiltrados.length === 0" class="no-result">
       No se encontró el lugar
     </div>
 
     <div class="grid">
       <div v-for="lugar in lugaresFiltrados" :key="lugar.id" class="card">
-        <h3>{{ lugar.nombre }}</h3>
-        <img :src="lugar.img" alt="imagen lugar" class="imagen-card">
+        <h3>{{ lugar.capital }}</h3>
+        <img :src="`/img/${lugar.img}`" :alt="lugar.capital" class="imagen-card">
 
-        <p class="temp">
-          {{ convertir(lugar.temperatura) }}°{{ unidad }}
-        </p>
-
-        <p class="estado">
-          <span class="estado-icono">{{ iconoEstado(lugar.estado) }}</span>
-          {{ lugar.estado }}
-        </p>
+        <template v-if="climaData[lugar.id]">
+          <p class="temp">
+            {{ convertir(climaData[lugar.id].temperatura) }}°{{ unidad }}
+          </p>
+          <p class="estado">
+            <span class="estado-icono">{{ weatherCodeToIcono(climaData[lugar.id].weatherCode) }}</span>
+            {{ climaData[lugar.id].estado }}
+          </p>
+        </template>
+        <p v-else class="cargando-card">Cargando...</p>
 
         <router-link :to="{ path: `/lugar/${lugar.id}`, query: { unidad } }" class="btn">
           Ver detalle
@@ -39,9 +43,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { lugares } from '../data/lugares'
+import { ciudades } from '../data/ciudades'
+import { weatherCodeToIcono } from '../services/climaService'
 
 const busqueda = ref('')
 const unidadPublica = ref('C')
@@ -49,6 +54,9 @@ const store = useStore()
 
 const isAuthenticated = computed(() => store.state.isAuthenticated)
 const usuario = computed(() => store.state.usuario)
+const climaData = computed(() => store.state.climaData)
+const cargando = computed(() => store.state.cargando)
+
 const unidad = computed({
   get() {
     if (isAuthenticated.value && usuario.value?.unidad) {
@@ -66,8 +74,8 @@ const unidad = computed({
 })
 
 const lugaresFiltrados = computed(() =>
-  lugares.filter(l =>
-    l.nombre.toLowerCase().includes(busqueda.value.toLowerCase())
+  ciudades.filter(c =>
+    c.capital.toLowerCase().includes(busqueda.value.toLowerCase())
   )
 )
 
@@ -78,16 +86,9 @@ function convertir(temp) {
   return temp
 }
 
-function iconoEstado(estado) {
-  const texto = estado.toLowerCase()
-  if (texto.includes('soleado')) return '☀️'
-  if (texto.includes('nublado')) return '☁️'
-  if (texto.includes('lluv')) return '🌧️'
-  if (texto.includes('tormenta')) return '⛈️'
-  if (texto.includes('niev')) return '❄️'
-  if (texto.includes('caluroso')) return '🌡️'
-  return '🌤️'
-}
+onMounted(() => {
+  store.dispatch('cargarClimas')
+})
 </script>
 
 <style scoped>
@@ -175,6 +176,19 @@ function iconoEstado(estado) {
 .btn:hover {
   background: #1e40af;
   color: white;
+}
+
+.cargando {
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.cargando-card {
+  color: #888;
+  font-style: italic;
+  margin-bottom: 15px;
 }
 
 .no-result {

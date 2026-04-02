@@ -43,6 +43,10 @@
         <button @click="quitar(ciudad.id)">Quitar de favoritos</button>
       </div>
     </div>
+
+    <div class="acciones">
+      <router-link to="/" class="btn-home">← Volver al inicio</router-link>
+    </div>
   </div>
 </template>
 
@@ -187,6 +191,24 @@ onMounted(() => {
 .cargando {
   color: #888;
   font-style: italic;
+}
+
+.acciones {
+  margin-top: 24px;
+}
+
+.btn-home {
+  text-decoration: none;
+  background: #6b7280;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-home:hover {
+  background: #4b5563;
 }
 
 button {

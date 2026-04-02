@@ -38,6 +38,10 @@
     <button class="boton-fav" v-if="isAuthenticated" @click="toggleFavorito">
       {{ esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
     </button>
+
+    <div class="acciones">
+      <router-link to="/" class="btn-home">← Volver al inicio</router-link>
+    </div>
   </div>
 
   <p v-else>Lugar no encontrado.</p>
@@ -166,5 +170,23 @@ button:hover {
 .cargando {
   color: #888;
   font-style: italic;
+}
+
+.acciones {
+  margin-top: 24px;
+}
+
+.btn-home {
+  text-decoration: none;
+  background: #6b7280;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-home:hover {
+  background: #4b5563;
 }
 </style>
