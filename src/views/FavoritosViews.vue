@@ -141,7 +141,7 @@ onMounted(() => {
 
 .estado-frecuente {
   font-weight: 600;
-  color: #1d4ed8;
+  color: #555;
 }
 
 .pronostico h4 {

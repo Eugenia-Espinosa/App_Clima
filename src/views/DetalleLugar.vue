@@ -35,7 +35,7 @@
 
     <p v-else class="cargando">Cargando datos del clima...</p>
 
-    <button v-if="isAuthenticated" @click="toggleFavorito">
+    <button class="boton-fav" v-if="isAuthenticated" @click="toggleFavorito">
       {{ esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
     </button>
   </div>
@@ -151,7 +151,18 @@ onMounted(() => {
   margin: 0 6px;
   vertical-align: middle;
 }
-
+.boton-fav {
+  margin-top: 16px;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  background: #1d4ed8;
+  color: #fff;
+}
+button:hover {
+  background: #1e40af;
+}
 .cargando {
   color: #888;
   font-style: italic;

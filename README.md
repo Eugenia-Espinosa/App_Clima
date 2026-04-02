@@ -18,6 +18,20 @@ Aplicación web desarrollada con **Vue 3** que muestra el clima en tiempo real d
 - Sección de favoritos (requiere login) con la misma información detallada
 
 ---
+## Usuarios de prueba
+
+nombre: Eugenia
+email: eugenia@mail.com
+password: 1234
+        
+nombre: Everto
+email: everto@mail.com
+password: 1234
+      
+nombre: Blanca,
+email: blanca@mail.com
+password: 1234
+        
 
 ## Tecnologías
 
